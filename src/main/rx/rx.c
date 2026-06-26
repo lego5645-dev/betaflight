@@ -72,6 +72,7 @@
 #include "rx/targetcustomserial.h"
 #include "rx/msp_override.h"
 #include "rx/mavlink.h"
+#include "build/debug.h"
 // --- [회피 모드 변수 끌어오기] ---
 extern bool isEvasionActive;
 extern uint8_t evasionDirection;
@@ -868,6 +869,7 @@ bool calculateRxChannelsAndUpdateFailsafe(timeUs_t currentTimeUs)
             // 회피 도중 기체가 앞뒤로 요동치지 않게 Pitch는 강제로 중앙 고정
             rcData[1] = 1500; 
         }
+        debug[0] = isEvasionActive;
         return true;
     }
 
