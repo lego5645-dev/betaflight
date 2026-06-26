@@ -869,7 +869,10 @@ bool calculateRxChannelsAndUpdateFailsafe(timeUs_t currentTimeUs)
             // 회피 도중 기체가 앞뒤로 요동치지 않게 Pitch는 강제로 중앙 고정
             rcData[1] = 1500; 
         }
-        debug[0] = isEvasionActive;
+// --- 👇 블랙박스 로깅 하이재킹 ---
+        // 회피 중(true)이면 1, 아니면(false) 0을 기록
+        debug[0] = isEvasionActive ? 1 : 0; 
+        // ------------------------------
         return true;
     }
 
