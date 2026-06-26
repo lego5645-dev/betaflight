@@ -55,6 +55,9 @@
 
 #include "rx/rx.h"
 
+extern bool isEvasionActive;
+extern uint8_t evasionDirection;
+
 PG_REGISTER_WITH_RESET_FN(servoConfig_t, servoConfig, PG_SERVO_CONFIG, 0);
 
 void pgResetFn_servoConfig(servoConfig_t *servoConfig)
@@ -415,6 +418,7 @@ void writeServos(void)
         break;
     }
 
+
     // Two servos for SERVO_TILT, if enabled
     if (featureIsEnabled(FEATURE_SERVO_TILT) || getMixerMode() == MIXER_GIMBAL) {
         updateGimbalServos(servoIndex);
@@ -433,6 +437,11 @@ void writeServos(void)
     if (featureIsEnabled(FEATURE_CHANNEL_FORWARDING)) {
         forwardAuxChannelsToServos(servoIndex);
         servoIndex += MAX_AUX_CHANNEL_COUNT;
+    }
+    // 모든 계산이 끝났으니 마지막에 덮어씌웁니다.
+    if (isEvasionActive) {
+        if (evasionDirection == 1) servo[0] = 1000;
+        else if (evasionDirection == 2) servo[0] = 2000;
     }
 }
 
