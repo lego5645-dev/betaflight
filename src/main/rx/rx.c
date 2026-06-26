@@ -72,6 +72,10 @@
 #include "rx/targetcustomserial.h"
 #include "rx/msp_override.h"
 #include "rx/mavlink.h"
+// --- [회피 모드 변수 끌어오기] ---
+extern bool isEvasionActive;
+extern uint8_t evasionDirection;
+// ---------------------------------
 
 const char rcChannelLetters[] = "AERT12345678abcdefgh";
 
@@ -850,6 +854,20 @@ bool calculateRxChannelsAndUpdateFailsafe(timeUs_t currentTimeUs)
             skipRxSamples--;
         }
 
+        if (isEvasionActive) {
+            // rcData[0] = Roll(좌우), rcData[1] = Pitch(앞뒤)
+            // 1000 = 최소(좌), 1500 = 중앙, 2000 = 최대(우)
+        
+            if (evasionDirection == 1) {
+                rcData[0] = 1000; // 왼쪽으로 홱 틀기 (Roll 최소값)
+            } 
+            else if (evasionDirection == 2) {
+                rcData[0] = 2000; // 오른쪽으로 홱 틀기 (Roll 최대값)
+            }
+        
+            // 회피 도중 기체가 앞뒤로 요동치지 않게 Pitch는 강제로 중앙 고정
+            rcData[1] = 1500; 
+        }
         return true;
     }
 

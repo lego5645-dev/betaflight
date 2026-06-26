@@ -160,6 +160,9 @@
 #endif
 
 #include "msp.h"
+// --- [회피 모드 전역 스위치] ---
+bool isEvasionActive = false;
+uint8_t evasionDirection = 0; // 0: 정지, 1: 왼쪽 회피, 2: 오른쪽 회피 등
 
 static const char * const flightControllerIdentifier = FC_FIRMWARE_IDENTIFIER; // 4 UPPER CASE alpha numeric characters that identify the flight controller.
 
@@ -2883,7 +2886,11 @@ static mspResult_e mspProcessInCommand(mspDescriptor_t srcDesc, int16_t cmdMSP, 
         magHold = sbufReadU16(src);
         break;
 #endif
-
+    case MSP_CUSTOM_EVASION:
+        isEvasionActive = sbufReadU8(src);    
+        evasionDirection = sbufReadU8(src);   
+        break;
+        
     case MSP_SET_RAW_RC:
 #ifdef USE_RX_MSP
         {

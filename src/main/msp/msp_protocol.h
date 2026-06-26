@@ -277,3 +277,5 @@
 #define MSP_DEBUGMSG                    253  // out message: debug string buffer
 #define MSP_DEBUG                       254  // out message: debug1,debug2,debug3,debug4
 #define MSP_V2_FRAME                    255  // MSPv2 payload indicator
+// [형님 전용 커스텀 회피 명령어 등록]
+#define MSP_CUSTOM_EVASION    42
